@@ -11,16 +11,17 @@ import java.util.Map;
 
 public class PipedriveAPITest {
 
+    public static String API_TOKEN = "4b27fc328d0c3fd3292fb19282267b7cbae91f5b";
+    public static String url = "https://api.pipedrive.com/v1/organizations";
+
     public static String scrapeOrganizations() {
-        String url = "https://api.pipedrive.com/v1/organizations";
-        String api_token = "ff08a95d60070e1a71e43e1b39575e0820aa257b";
         HttpResponse<JsonNode> response;
         String result = "";
 
         try {
 
             response = Unirest.get(url)
-                    .queryString("api_token", api_token)
+                    .queryString("api_token", API_TOKEN)
                     .asJson();
 
 //            System.out.println(response.getBody().getObject().getJSONArray("data"));

@@ -1,7 +1,9 @@
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.connectors.pipedrive.PipedriveAPITest;
+import org.connectors.pipedrive.PipedriveHistoricalLoadTest;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class ProducerExample {
@@ -12,11 +14,19 @@ public class ProducerExample {
         Properties kafkaProducerProperties = setUpProperties();
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(kafkaProducerProperties);
 
-        String value = PipedriveAPITest.scrapeOrganizations();
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(KAFKA_TOPIC, value);
+        // String value = PipedriveAPITest.scrapeOrganizations();
+        // ProducerRecord<String, String> record = new ProducerRecord<String, String>(KAFKA_TOPIC, value);
+
+        ArrayList<String> historical_values = PipedriveHistoricalLoadTest.fetchOrganizations();
+        ArrayList<ProducerRecord<String, String>> records = new ArrayList<ProducerRecord<String, String>>();
+        for (String historical_value: historical_values) {
+            records.add(new ProducerRecord<String, String>(KAFKA_TOPIC, historical_value));
+        }
 
         try {
-            System.out.println(producer.send(record).get());
+            for (ProducerRecord<String, String> record: records) {
+                System.out.println(producer.send(record).get());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
