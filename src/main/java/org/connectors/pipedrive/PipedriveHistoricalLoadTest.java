@@ -33,7 +33,7 @@ public class PipedriveHistoricalLoadTest {
                 if(responseObject.equals(null))
                     break;
 
-                responseData = response.getBody().getObject().getJSONArray("data");
+                responseData = (JSONArray) responseObject;
                 responseLength = responseData.length();
 
                 for (int i=0; i<responseLength; ++i) {
